@@ -1,7 +1,6 @@
 const NodeCache = require("node-cache");
 const crypto = require("crypto");
 
-// In-memory cache: 1 hour TTL
 const analysisCache = new NodeCache({ stdTTL: 3600, checkperiod: 600 });
 
 function getCacheKey(text) {
@@ -10,7 +9,6 @@ function getCacheKey(text) {
 
 async function analyzeEmotion(text) {
   const cacheKey = getCacheKey(text);
-
   const cached = analysisCache.get(cacheKey);
   if (cached) {
     console.log("📦 Cache hit for analysis");
@@ -61,7 +59,6 @@ Respond with exactly this JSON structure:
   return { ...result, cached: false };
 }
 
-// Streaming not supported in basic Gemini REST, falls back to standard
 async function analyzeEmotionStream(text, onChunk) {
   const result = await analyzeEmotion(text);
   onChunk(JSON.stringify(result));
